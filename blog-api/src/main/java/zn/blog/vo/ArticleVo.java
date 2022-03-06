@@ -24,11 +24,16 @@ public class ArticleVo {
      */
     private String createDate;
 
+    /**
+     * 作者名称 即SysUser-nickname
+     */
     private String author;
 
 //    private ArticleBodyVo body;
-//
-//    private List<TagVo> tags;
+    /**
+     * 文章所属的标签们
+     */
+    private List<TagVo> tags;
 //
 //    private List<CategoryVo> categorys;
 

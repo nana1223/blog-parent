@@ -7,6 +7,7 @@ public class Tag {
 
     private Long id;
 
+    //logo
     private String avatar;
 
     private String tagName;

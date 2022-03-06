@@ -1,7 +1,9 @@
 package zn.blog.service;
 
-import zn.blog.vo.Result;
+import zn.blog.vo.ArticleVo;
 import zn.blog.vo.params.PageParams;
+
+import java.util.List;
 
 public interface ArticleService {
 
@@ -10,5 +12,5 @@ public interface ArticleService {
      * @param pageParams
      * @return
      */
-    Result listArticle(PageParams pageParams);
+    List<ArticleVo> listArticle(PageParams pageParams);
 }

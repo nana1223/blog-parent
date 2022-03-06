@@ -2,6 +2,9 @@ package zn.blog.dao.pojo;
 
 import lombok.Data;
 
+/**
+ * 作者
+ */
 @Data
 public class SysUser {
 
