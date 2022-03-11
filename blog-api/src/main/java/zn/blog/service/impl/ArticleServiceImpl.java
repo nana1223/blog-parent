@@ -36,12 +36,33 @@ public class ArticleServiceImpl implements ArticleService {
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         //按置顶和创建时间排序
-        //queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate); ？？？？？？？？？？？？？？？？？报错
+        queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
         List<Article> records = articlePage.getRecords();
         //把数据库对应的实体数据转换成页面展示的数据vo对象
         List<ArticleVo> articleVoList = copyList(records, true, true);
         return articleVoList;
+    }
+
+
+    @Override
+    public Result hotArticle(int limit) {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Article::getViewCounts);
+        queryWrapper.select(Article::getId, Article::getTitle);
+        queryWrapper.last("limit " + limit);
+        List<Article> articleList = articleMapper.selectList(queryWrapper);
+        return Result.success(copyList(articleList, false, false));
+    }
+
+    @Override
+    public Result newArticles(int limit) {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Article::getCreateDate);
+        queryWrapper.select(Article::getId, Article::getTitle);
+        queryWrapper.last("limit " + limit);
+        List<Article> articleList = articleMapper.selectList(queryWrapper);
+        return Result.success(copyList(articleList, false, false));
     }
 
     private List<ArticleVo> copyList(List<Article> records, boolean isTag, boolean isAuthor) {
@@ -68,4 +89,5 @@ public class ArticleServiceImpl implements ArticleService {
 //        }
         return articleVo;
     }
+
 }

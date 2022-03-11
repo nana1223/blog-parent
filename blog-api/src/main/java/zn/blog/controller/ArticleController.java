@@ -32,4 +32,23 @@ public class ArticleController {
         return Result.success(articleVoList);
     }
 
+    /**
+     * 首页 最热文章
+     * @return
+     */
+    @PostMapping("hot")
+    public Result hotArticle(){
+        int limit = 5;
+        return articleService.hotArticle(limit);
+    }
+
+    /**
+     * 首页 最新文章
+     * @return
+     */
+    @PostMapping("new")
+    public Result newArticles(){
+        int limit = 5;
+        return articleService.newArticles(limit);
+    }
 }

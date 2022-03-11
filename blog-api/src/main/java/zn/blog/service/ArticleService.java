@@ -1,6 +1,7 @@
 package zn.blog.service;
 
 import zn.blog.vo.ArticleVo;
+import zn.blog.vo.Result;
 import zn.blog.vo.params.PageParams;
 
 import java.util.List;
@@ -13,4 +14,18 @@ public interface ArticleService {
      * @return
      */
     List<ArticleVo> listArticle(PageParams pageParams);
+
+    /**
+     * 最热文章
+     * @param limit
+     * @return
+     */
+    Result hotArticle(int limit);
+
+    /**
+     * 最新文章
+     * @param limit
+     * @return
+     */
+    Result newArticles(int limit);
 }

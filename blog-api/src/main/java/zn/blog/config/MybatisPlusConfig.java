@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @MapperScan("zn.blog.dao.mapper")
 public class MybatisPlusConfig {
 
-    //分页插件
+    //分页插件 MyBatis Plus自带分页插件
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
