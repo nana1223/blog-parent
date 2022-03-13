@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import zn.blog.dao.dos.Archives;
 import zn.blog.dao.mapper.ArticleMapper;
 import zn.blog.dao.pojo.Article;
 import zn.blog.service.ArticleService;
@@ -63,6 +64,12 @@ public class ArticleServiceImpl implements ArticleService {
         queryWrapper.last("limit " + limit);
         List<Article> articleList = articleMapper.selectList(queryWrapper);
         return Result.success(copyList(articleList, false, false));
+    }
+
+    @Override
+    public Result listArchives() {
+        List<Archives> archivesList = articleMapper.listArchives();
+        return Result.success(archivesList);
     }
 
     private List<ArticleVo> copyList(List<Article> records, boolean isTag, boolean isAuthor) {
