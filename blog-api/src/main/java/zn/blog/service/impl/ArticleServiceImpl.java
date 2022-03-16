@@ -11,10 +11,7 @@ import zn.blog.dao.mapper.ArticleBodyMapper;
 import zn.blog.dao.mapper.ArticleMapper;
 import zn.blog.dao.pojo.Article;
 import zn.blog.dao.pojo.ArticleBody;
-import zn.blog.service.ArticleService;
-import zn.blog.service.CategoryService;
-import zn.blog.service.SysUserService;
-import zn.blog.service.TagService;
+import zn.blog.service.*;
 import zn.blog.vo.ArticleBodyVo;
 import zn.blog.vo.ArticleVo;
 import zn.blog.vo.Result;
@@ -40,6 +37,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ThreadService threadService;
 
     @Override
     public List<ArticleVo> listArticle(PageParams pageParams) {
@@ -86,8 +86,14 @@ public class ArticleServiceImpl implements ArticleService {
     public Result findArticleById(Long articleId) {
         //1.根据id查询文章信息
         Article article = articleMapper.selectById(articleId);
+        //2.根据bodyId和categoryId，做关联查询，查文章的详情内容和分类
         ArticleVo articleVo = copy(article, true, true, true, true);
-        //2.根据bodyId和categoryId，做关联查询
+
+        //查看完文章，要在这儿新增阅读次数，注意点：
+        //1.查看完文章后，本应该直接返回数据，这时候做了一个更新操作，更新时加写锁，阻塞其他的读操作，性能就会比较低
+        //2.而且更新 增加了这个查看文章详情业务接口的耗时。如果一旦更新出问题，不能影响查看文章的操作
+        //线程池：可以把更新阅读次数的操作 扔到线程池中去执行，就和主线程不相干了
+        threadService.updateArticleViewCount(articleMapper, article);
         return Result.success(articleVo);
     }
 

@@ -15,9 +15,13 @@ public class Article {
 
     private String summary;
 
-    private int commentCounts;
+    /**
+     * 理解：int型的数据不能写int，需要写成Integer，因为int会给默认值0，
+     * 然后在更新阅读次数那个操作那儿articleMapper.update()，传入整个pojo，mybatisplus就会默认给所有有值的属性都更新，就会改变int的字段值，所以要写成封装类
+     */
+    private Integer commentCounts;
 
-    private int viewCounts;
+    private Integer viewCounts;
 
     /**
      * 作者id
@@ -35,7 +39,7 @@ public class Article {
     /**
      * 置顶
      */
-    private int weight = Article_Common;
+    private Integer weight;
 
 
     /**
