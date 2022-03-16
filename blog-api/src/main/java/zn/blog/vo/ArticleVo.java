@@ -1,6 +1,8 @@
 package zn.blog.vo;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.util.List;
@@ -29,12 +31,15 @@ public class ArticleVo {
      */
     private String author;
 
-//    private ArticleBodyVo body;
+    //文章内容
+    private ArticleBodyVo body;
     /**
      * 文章所属的标签们
      */
     private List<TagVo> tags;
-//
-//    private List<CategoryVo> categorys;
+
+    //文章所属类别
+    private CategoryVo category;
+
 
 }

@@ -1,11 +1,9 @@
 package zn.blog.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import zn.blog.service.ArticleService;
+
 import zn.blog.vo.ArticleVo;
 import zn.blog.vo.Result;
 import zn.blog.vo.params.PageParams;
@@ -34,30 +32,44 @@ public class ArticleController {
 
     /**
      * 首页 最热文章
+     *
      * @return
      */
     @PostMapping("hot")
-    public Result hotArticle(){
+    public Result hotArticle() {
         int limit = 5;
         return articleService.hotArticle(limit);
     }
 
     /**
      * 首页 最新文章
+     *
      * @return
      */
     @PostMapping("new")
-    public Result newArticles(){
+    public Result newArticles() {
         int limit = 5;
         return articleService.newArticles(limit);
     }
 
     /**
      * 首页 文章归档
+     *
      * @return
      */
     @PostMapping("listArchives")
-    public Result listArchives(){
+    public Result listArchives() {
         return articleService.listArchives();
+    }
+
+    /**
+     * 文章详情
+     *
+     * @param articleId
+     * @return
+     */
+    @PostMapping("view/{id}")
+    public Result findArticleById(@PathVariable("id") Long articleId) {
+        return articleService.findArticleById(articleId);
     }
 }
