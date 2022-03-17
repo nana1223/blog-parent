@@ -131,11 +131,10 @@ public class ArticleServiceImpl implements ArticleService {
             Long articleId = article.getId();
             articleVo.setTags(tagService.findTagsByArticleId(articleId));
         }
-        //用postman测都能拿到，但是用前端测就会NullPointerException
-//        if (isAuthor) {
-//            Long authorId = article.getAuthorId(); //用postman测都能拿到，但是用前端测就会NullPointerException
-//            articleVo.setAuthor(sysUserService.findUserById(authorId).getNickname());
-//        }
+        if (isAuthor) {
+            Long authorId = article.getAuthorId(); //用postman测都能拿到，但是用前端测就会NullPointerException
+            articleVo.setAuthor(sysUserService.findUserById(authorId).getNickname());
+        }
         if (isBody) {
             Long bodyId = article.getBodyId();
             articleVo.setBody(findArticleBodyById(bodyId));

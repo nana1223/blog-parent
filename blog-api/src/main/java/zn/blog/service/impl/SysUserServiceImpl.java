@@ -2,6 +2,7 @@ package zn.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zn.blog.dao.mapper.SysUserMapper;
@@ -11,6 +12,7 @@ import zn.blog.service.SysUserService;
 import zn.blog.vo.ErrorCode;
 import zn.blog.vo.LoginUserVo;
 import zn.blog.vo.Result;
+import zn.blog.vo.UserVo;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
@@ -25,7 +27,7 @@ public class SysUserServiceImpl implements SysUserService {
     public SysUser findUserById(Long id) {
         SysUser sysUser = sysUserMapper.selectById(id);
         if (sysUser == null) {
-            //?????????????????????????????????????????????空指针报错Cannot invoke "zn.blog.dao.pojo.SysUser.setNickname(String)" because "sysUser" is null
+            sysUser = new SysUser();
             sysUser.setNickname("匿名");
         }
         return sysUser;
@@ -70,5 +72,19 @@ public class SysUserServiceImpl implements SysUserService {
         //保存用户时 id会自动生成
         //mybatis-plus 默认生成的id是 分布式id 雪花算法
         sysUserMapper.insert(sysUser);
+    }
+
+    @Override
+    public UserVo findUserVoById(Long authorId) {
+        SysUser sysUser = sysUserMapper.selectById(authorId);
+        if (sysUser == null) {
+            sysUser = new SysUser();
+            sysUser.setId(1L);
+            sysUser.setAvatar("/static/img/logo.b3a48c0.png");
+            sysUser.setNickname("匿名");
+        }
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(sysUser,userVo);
+        return userVo;
     }
 }

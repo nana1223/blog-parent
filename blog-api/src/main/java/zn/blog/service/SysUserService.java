@@ -2,6 +2,7 @@ package zn.blog.service;
 
 import zn.blog.dao.pojo.SysUser;
 import zn.blog.vo.Result;
+import zn.blog.vo.UserVo;
 
 public interface SysUserService {
 
@@ -44,4 +45,12 @@ public interface SysUserService {
      * @param sysUser
      */
     void save(SysUser sysUser);
+
+    /**
+     * 根据作者id 查作者的信息
+     *
+     * @param authorId
+     * @return
+     */
+    UserVo findUserVoById(Long authorId);
 }
