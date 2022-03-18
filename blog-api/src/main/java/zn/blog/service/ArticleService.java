@@ -2,6 +2,7 @@ package zn.blog.service;
 
 import zn.blog.vo.ArticleVo;
 import zn.blog.vo.Result;
+import zn.blog.vo.params.ArticleParam;
 import zn.blog.vo.params.PageParams;
 
 import java.util.List;
@@ -46,4 +47,11 @@ public interface ArticleService {
      * @return
      */
     Result findArticleById(Long articleId);
+
+    /**
+     * 发布文章
+     * @param articleParam
+     * @return
+     */
+    Result publish(ArticleParam articleParam);
 }

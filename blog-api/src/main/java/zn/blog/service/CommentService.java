@@ -1,6 +1,7 @@
 package zn.blog.service;
 
 import zn.blog.vo.Result;
+import zn.blog.vo.params.CommentParam;
 
 public interface CommentService {
     /**
@@ -9,4 +10,11 @@ public interface CommentService {
      * @return
      */
     Result commentsByArticleId(Long articleId);
+
+    /**
+     * 创建新评论
+     * @param commentParam
+     * @return
+     */
+    Result comment(CommentParam commentParam);
 }

@@ -1,5 +1,6 @@
 package zn.blog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,12 @@ public class TagServiceImpl implements TagService {
         }
         List<Tag> tagList = tagMapper.findTagsByTagIds(tagIdList);
         return Result.success(tagList);
+    }
+
+    @Override
+    public Result findAll() {
+
+        List<Tag> tags = this.tagMapper.selectList(new LambdaQueryWrapper<>());
+        return Result.success(copyList(tags));
     }
 }

@@ -6,6 +6,7 @@ import zn.blog.service.ArticleService;
 
 import zn.blog.vo.ArticleVo;
 import zn.blog.vo.Result;
+import zn.blog.vo.params.ArticleParam;
 import zn.blog.vo.params.PageParams;
 
 import java.util.List;
@@ -71,5 +72,16 @@ public class ArticleController {
     @PostMapping("view/{id}")
     public Result findArticleById(@PathVariable("id") Long articleId) {
         return articleService.findArticleById(articleId);
+    }
+
+    /**
+     * 发布文章
+     *
+     * @param articleParam
+     * @return 返回文章id （发布完文章要跳到文章详情页）
+     */
+    @PostMapping("publish")
+    public Result publish(@RequestBody ArticleParam articleParam) {
+        return articleService.publish(articleParam);
     }
 }

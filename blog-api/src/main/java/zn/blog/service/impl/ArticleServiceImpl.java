@@ -9,16 +9,24 @@ import org.springframework.stereotype.Service;
 import zn.blog.dao.dos.Archives;
 import zn.blog.dao.mapper.ArticleBodyMapper;
 import zn.blog.dao.mapper.ArticleMapper;
+import zn.blog.dao.mapper.ArticleTagMapper;
 import zn.blog.dao.pojo.Article;
 import zn.blog.dao.pojo.ArticleBody;
+import zn.blog.dao.pojo.ArticleTag;
+import zn.blog.dao.pojo.SysUser;
 import zn.blog.service.*;
+import zn.blog.utils.UserThreadLocal;
 import zn.blog.vo.ArticleBodyVo;
 import zn.blog.vo.ArticleVo;
 import zn.blog.vo.Result;
+import zn.blog.vo.TagVo;
+import zn.blog.vo.params.ArticleParam;
 import zn.blog.vo.params.PageParams;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -40,6 +48,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ThreadService threadService;
+
+    @Autowired
+    private ArticleTagMapper articleTagMapper;
 
     @Override
     public List<ArticleVo> listArticle(PageParams pageParams) {
@@ -95,6 +106,56 @@ public class ArticleServiceImpl implements ArticleService {
         //线程池：可以把更新阅读次数的操作 扔到线程池中去执行，就和主线程不相干了
         threadService.updateArticleViewCount(articleMapper, article);
         return Result.success(articleVo);
+    }
+
+    @Override
+    public Result publish(ArticleParam articleParam) {
+        /*
+        1. 发布文章：目的 构建Article对象
+           (1) 作者id:为当前登录用户 从ThreadLocal中拿，前提是此接口要加到登录拦截当中
+           (2) 标签 ： 要将标签加入到article-tag关联列表当中
+           (3) 内容：存储 到 articleBody
+           (4) 剩下的属性就填充就行了
+         */
+        Article article = new Article();
+        //authorId
+        SysUser sysUser = UserThreadLocal.get();
+        article.setAuthorId(sysUser.getId());
+        article.setCategoryId(articleParam.getCategory().getId());
+        article.setCreateDate(System.currentTimeMillis());
+        article.setCommentCounts(0);
+        article.setSummary(articleParam.getSummary());
+        article.setTitle(articleParam.getTitle());
+        article.setViewCounts(0);
+        article.setWeight(Article.Article_Common);
+        //插入之后会生成一个文章id
+        this.articleMapper.insert(article);
+
+        //tag
+        List<TagVo> tags = articleParam.getTags();
+        Long articleId = article.getId();
+        if (tags != null) {
+            for (TagVo tag : tags
+            ) {
+                ArticleTag articleTag = new ArticleTag();
+                articleTag.setArticleId(articleId);
+                articleTag.setTagId(tag.getId());
+                articleTagMapper.insert(articleTag);
+                //啥破代码。。。。。。
+            }
+        }
+        //body
+        ArticleBody articleBody = new ArticleBody();
+        articleBody.setArticleId(articleId);
+        articleBody.setContent(articleParam.getBody().getContent());
+        articleBody.setContentHtml(articleParam.getBody().getContentHtml());
+        articleBodyMapper.insert(articleBody);
+        article.setBodyId(articleBody.getId());
+        articleMapper.updateById(article);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("id", articleId.toString());
+        return Result.success(map);
     }
 
     /**

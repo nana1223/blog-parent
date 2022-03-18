@@ -10,6 +10,6 @@ public class TestController {
 
     @RequestMapping
     public Result test(){
-        return Result.success(null);
+        return Result.success("ttt");
     }
 }

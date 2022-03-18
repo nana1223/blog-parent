@@ -7,6 +7,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import zn.blog.handler.LoginInterceptor;
 
+/**
+ * @author zhangna
+ */
 @Configuration
 public class WebMVCConfig implements WebMvcConfigurer {
 
@@ -24,12 +27,16 @@ public class WebMVCConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 配置登录拦截器，使拦截器生效，配拦截路径
+     * 配置登录拦截器，使拦截器生效，配拦截路径 （有的接口需要登录之后才能做 eg：评论，发文章）
      *
      * @param registry
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor).addPathPatterns("/test");
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/test")
+                .addPathPatterns("/comments/create/change")
+                .addPathPatterns("/articles/publish");
+        ;
     }
 }

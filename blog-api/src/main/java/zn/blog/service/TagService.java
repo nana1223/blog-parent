@@ -9,6 +9,7 @@ public interface TagService {
 
     /**
      * 根据文章id查标签tag
+     *
      * @param Id
      * @return
      */
@@ -16,8 +17,17 @@ public interface TagService {
 
     /**
      * 首页获取最热标签：即该标签下文章数量是最多的
+     *
      * @param limit
      * @return
      */
     Result hots(int limit);
+
+    /**
+     * 获取所有的文章标签
+     *
+     * @return
+     */
+    Result findAll();
+
 }

@@ -1,6 +1,7 @@
 package zn.blog.service;
 
 import zn.blog.vo.CategoryVo;
+import zn.blog.vo.Result;
 
 public interface CategoryService {
     /**
@@ -9,4 +10,10 @@ public interface CategoryService {
      * @return
      */
     CategoryVo findCategoryById(Long categoryId);
+
+    /**
+     * 获取所有类别
+     * @return
+     */
+    Result findAll();
 }

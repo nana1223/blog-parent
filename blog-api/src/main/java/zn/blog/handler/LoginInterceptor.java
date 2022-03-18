@@ -33,12 +33,15 @@ public class LoginInterceptor implements HandlerInterceptor {
          * 1.判断 请求的接口路径 是否为Handler方法（Controller方法）
          * 2.判断 token是否为空，若为空则是未登录需要登录；若不为空 则登陆验证 loginService checkToken，若认证成功，放行即可
          */
-        if (handler instanceof HandlerMethod) {
-            //handler 可能是 RequestResourceHandler
+        if (!(handler instanceof HandlerMethod)) {
+            //handler 如果不是接口方法 直接放行即可 因为它可能是访问资源的 RequestResourceHandler
             return true;
         }
         String token = request.getHeader("Authorization");
-
+        if (token == null) {
+            //发表评论功能 前端传过来的Header中存token的名字是Oauth-Token
+            token = request.getHeader("Oauth-Token");
+        }
         log.info("=================request start===========================");
         String requestURI = request.getRequestURI();
         log.info("request uri:{}", requestURI);

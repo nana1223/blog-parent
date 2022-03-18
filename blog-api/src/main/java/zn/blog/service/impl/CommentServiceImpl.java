@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zn.blog.dao.mapper.CommentMapper;
 import zn.blog.dao.pojo.Comment;
+import zn.blog.dao.pojo.SysUser;
 import zn.blog.service.CommentService;
 import zn.blog.service.SysUserService;
+import zn.blog.utils.UserThreadLocal;
 import zn.blog.vo.CommentVo;
 import zn.blog.vo.Result;
 import zn.blog.vo.UserVo;
+import zn.blog.vo.params.CommentParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,27 @@ public class CommentServiceImpl implements CommentService {
         List<CommentVo> commentVoList = copyList(commentList);
         return Result.success(commentVoList);
 
+    }
+
+    @Override
+    public Result comment(CommentParam commentParam) {
+        SysUser sysUser = UserThreadLocal.get();
+        Comment comment = new Comment();
+        comment.setArticleId(commentParam.getArticleId());
+        comment.setAuthorId(sysUser.getId());
+        comment.setContent(commentParam.getContent());
+        comment.setCreateDate(System.currentTimeMillis());
+        Long parent = commentParam.getParent();
+        if (parent == null || parent == 0) {
+            comment.setLevel(1);
+        }else{
+            comment.setLevel(2);
+        }
+        comment.setParentId(parent == null ? 0 : parent);
+        Long toUserId = commentParam.getToUserId();
+        comment.setToUid(toUserId == null ? 0 : toUserId);
+        commentMapper.insert(comment);
+        return Result.success(null);
     }
 
     private List<CommentVo> copyList(List<Comment> commentList) {

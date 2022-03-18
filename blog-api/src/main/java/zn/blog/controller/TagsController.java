@@ -24,4 +24,14 @@ public class TagsController {
         int limit = 6;
         return tagService.hots(limit);
     }
+
+    /**
+     * 获取所有的文章标签
+     *
+     * @return
+     */
+    @GetMapping
+    public Result findAll() {
+        return tagService.findAll();
+    }
 }
