@@ -2,6 +2,7 @@ package zn.blog.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import zn.blog.common.aop.LogAnnotation;
 import zn.blog.service.ArticleService;
 
 import zn.blog.vo.ArticleVo;
@@ -26,6 +27,8 @@ public class ArticleController {
      * @return Result是统一返回结果
      */
     @PostMapping()
+    //加上此注解，代表要对此接口记录日志
+    @LogAnnotation(module = "文章", operator = "获取文章列表")
     public Result listArticle(@RequestBody PageParams pageParams) {
         List<ArticleVo> articleVoList = articleService.listArticle(pageParams);
         return Result.success(articleVoList);
