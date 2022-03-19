@@ -12,7 +12,7 @@ import zn.blog.vo.Result;
 
 import java.util.UUID;
 
-@RestController
+//@RestController
 @RequestMapping("upload")
 public class UploadController {
 

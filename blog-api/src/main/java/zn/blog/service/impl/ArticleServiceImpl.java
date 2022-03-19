@@ -57,6 +57,26 @@ public class ArticleServiceImpl implements ArticleService {
         //分页查询数据库表article
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+
+        //说明这里获取的文章列表 是从分类下 获取的文章列表
+        if (pageParams.getCategoryId() != null) {
+            queryWrapper.eq(Article::getCategoryId, pageParams.getCategoryId());
+        }
+
+        //说明这里获取的文章列表 是从标签下 获取的文章列表
+        List<Long> articleIdList = new ArrayList<>();
+        if (pageParams.getTagId() != null) {
+            //注意 article表中没有tag字段，所以要从article-tag关联表中去查出所有文章id
+            LambdaQueryWrapper<ArticleTag> articleTagLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            articleTagLambdaQueryWrapper.eq(ArticleTag::getTagId, pageParams.getTagId());
+            List<ArticleTag> articleTagList = articleTagMapper.selectList(articleTagLambdaQueryWrapper);
+            for (ArticleTag articleTag : articleTagList) {
+                articleIdList.add(articleTag.getArticleId());
+            }
+            if (articleIdList.size() > 0) {
+                queryWrapper.in(Article::getId, articleIdList);
+            }
+        }
         //按置顶和创建时间排序
         queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);

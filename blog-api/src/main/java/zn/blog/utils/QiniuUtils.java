@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 七牛云服务器的配置
  */
-@Component
+//@Component
 public class QiniuUtils {
 
     public static  final String url = "https://static.mszlu.com/";
